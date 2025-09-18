@@ -1,0 +1,35 @@
+name: generate-ecommerce-incident-report
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  generate-report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt || true
+      - name: Generate E-Commerce Incident Report
+        run: |
+          python generate_html_report.py
+      - name: Upload HTML Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: ecommerce-incident-report
+          path: test_results/report.html
+      - name: Upload CSS Asset
+        uses: actions/upload-artifact@v4
+        with:
+          name: report-style
+          path: test_results/style.css

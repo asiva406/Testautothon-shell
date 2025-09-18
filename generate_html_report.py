@@ -147,8 +147,11 @@ def generate_html_report(plan_json_path, html_path):
             </tr>
     '''
 
-    # Sort results by priority_score descending
-    sorted_results = sorted(results, key=lambda r: r.get('priority_score', 0), reverse=True)
+    # Sort results by priority_score descending, then module ascending
+    sorted_results = sorted(
+        results,
+        key=lambda r: (-r.get('priority_score', 0), str(r.get('module', '')))
+    )
     for result in sorted_results:
         score = result.get('priority_score', 0)
         if score > 7:
@@ -166,7 +169,7 @@ def generate_html_report(plan_json_path, html_path):
         if isinstance(final_minutes, float):
             final_minutes = f"{final_minutes:.1f}"
         if isinstance(priority_score, float):
-            priority_score = f"{priority_score:.1f}"
+            priority_score = f"{priority_score:.3f}"
         html += f'<tr class="{row_class}">' \
                 f'<td>{result.get("test_id", "")}</td>' \
                 f'<td>{result.get("module", "")}</td>' \
