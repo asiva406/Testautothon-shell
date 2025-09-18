@@ -21,12 +21,9 @@ jobs:
       - name: Send to Slack
         uses: slackapi/slack-github-action@v1.24.0
         with:
-          token: ${{ secrets.SLACK_BOT_TOKEN }}
-          payload: |
-            {
-              "channel-id": "${{ secrets.SLACK_CHANNEL_ID }}",
-              "text": "📊 *Automation Report*:\n```$(cat report.txt)```"
-            }
+          channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
+          slack-message: |
+            📊 *Automation Report* uploaded. See attached files
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
 
@@ -34,7 +31,7 @@ jobs:
         run: |
           for file in test_results/*; do
             curl -F file=@$file \
-                 -F channels=shell_hackathon_eng-aaaark7pjvflhi2ja4gtkkkgpi@shellhackathon.slack.com \
+                 -F channels=${{ secrets.SLACK_CHANNEL_ID }} \
                  -H "Authorization: Bearer ${{ secrets.SLACK_BOT_TOKEN }}" \
                  https://slack.com/api/files.upload
           done
