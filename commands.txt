@@ -1,5 +1,5 @@
 // Command to run the main script
-python .\test_plan.py
+python .\incident_processor.py
 
 // Command to generate HTML Report
 python .\generate_html_report.py
