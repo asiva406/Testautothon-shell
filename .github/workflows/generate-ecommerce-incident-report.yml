@@ -32,7 +32,7 @@ jobs:
           python tests/test_incident_processor.py
         continue-on-error: true
           
-      - name: Run Main Python Code
+      - name: Run Incident Processor code
         run: |
           python incident_processor.py
         continue-on-error: true
@@ -42,15 +42,15 @@ jobs:
           python generate_html_report.py
         continue-on-error: true
           
-      - name: Upload HTML Reports as Artifacts
+      - name: Publish test results
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: Automation-Tests-html-reports
+          name: test-results 
           path: ./test_results/
         continue-on-error: true
           
-      - name: Send to Slack
+      - name: Slack Alert
         uses: slackapi/slack-github-action@v1.24.0
         with:
           channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
