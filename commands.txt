@@ -1,8 +1,5 @@
 // Command to run the main script
 python .\test_plan.py
 
-// command to generate the Dashboard
-python .\dashboard_web.py
-
-// Command to generate HTML Results
-pytest --html=test_results/report.html
+// Command to generate HTML Report
+python .\generate_html_report.py

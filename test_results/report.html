@@ -1,770 +1,114 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8"/>
-    <title id="head-title">report.html</title>
-      <link href="assets\style.css" rel="stylesheet" type="text/css"/>
-  </head>
-  <body>
-    <h1 id="title">report.html</h1>
-    <p>Report generated on 18-Sep-2025 at 12:13:51 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a>
-        v4.1.1</p>
-    <div id="environment-header">
-      <h2>Environment</h2>
-    </div>
-    <table id="environment"></table>
-    <!-- TEMPLATES -->
-      <template id="template_environment_row">
-      <tr>
-        <td></td>
-        <td></td>
-      </tr>
-    </template>
-    <template id="template_results-table__body--empty">
-      <tbody class="results-table-row">
-        <tr id="not-found-message">
-          <td colspan="4">No results found. Check the filters.</th>
-        </tr>
-    </template>
-    <template id="template_results-table__tbody">
-      <tbody class="results-table-row">
-        <tr class="collapsible">
-        </tr>
-        <tr class="extras-row">
-          <td class="extra" colspan="4">
-            <div class="extraHTML"></div>
-            <div class="media">
-              <div class="media-container">
-                  <div class="media-container__nav--left"><</div>
-                  <div class="media-container__viewport">
-                    <img src="" />
-                    <video controls>
-                      <source src="" type="video/mp4">
-                    </video>
-                  </div>
-                  <div class="media-container__nav--right">></div>
+
+    <html>
+    <head>
+        <title>E-Commerce Incidents Report</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+    </head>
+    <body>
+    <h1>E-Commerce Incidents Report</h1>
+        <div class="dashboard">
+            <strong>Total Incidents:</strong> 110<br><br>
+            <div class="dashboard-flex">
+                <div class="dashboard-section">
+                    <div style="margin-bottom: 10px; font-size: 1.2em; font-weight: bold;">Modules</div>
+                    <canvas id="modulesChart" width="260" height="220"></canvas>
                 </div>
-                <div class="media__name"></div>
-                <div class="media__counter"></div>
+                <div class="dashboard-section">
+                    <div style="margin-bottom: 10px; font-size: 1.2em; font-weight: bold;">Failure Types</div>
+                    <canvas id="failureTypesChart" width="220" height="220"></canvas>
+                </div>
+                <div class="dashboard-section">
+                    <div style="margin-bottom: 10px; font-size: 1.2em; font-weight: bold;">Environments</div>
+                    <canvas id="environmentsChart" width="220" height="220"></canvas>
+                </div>
             </div>
-            <div class="logwrapper">
-              <div class="logexpander"></div>
-              <div class="log"></div>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </template>
-    <!-- END TEMPLATES -->
-    <div class="summary">
-      <div class="summary__data">
-        <h2>Summary</h2>
-        <div class="additional-summary prefix">
         </div>
-        <p class="run-count">4 tests took 3 ms.</p>
-        <p class="filter">(Un)check the boxes to filter the results.</p>
-        <div class="summary__reload">
-          <div class="summary__reload__button hidden" onclick="location.reload()">
-            <div>There are still tests running. <br />Reload this page to get the latest results!</div>
-          </div>
+        <script>
+            Chart.register(window.ChartDataLabels);
+            function makePieConfig(labels, data, colors) {
+                return {
+                    type: 'pie',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: data,
+                            backgroundColor: colors,
+                        }]
+                    },
+                    options: {
+                        plugins: {
+                            legend: { display: true, position: 'bottom' },
+                            datalabels: {
+                                color: '#222',
+                                font: { weight: 'bold' },
+                                formatter: function(value, context) {
+                                    return value;
+                                }
+                            }
+                        }
+                    },
+                    plugins: [ChartDataLabels]
+                };
+            }
+            function makeBarConfig(labels, data, colors) {
+                return {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Count',
+                            data: data,
+                            backgroundColor: colors,
+                        }]
+                    },
+                    options: {
+                        plugins: {
+                            legend: { display: false },
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'top',
+                                color: '#222',
+                                font: { weight: 'bold' },
+                                formatter: function(value) { return value; }
+                            }
+                        },
+                        scales: {
+                            y: { beginAtZero: true, precision: 0 }
+                        }
+                    },
+                    plugins: [ChartDataLabels]
+                };
+            }
+            // Professional color palette
+            const proBarColors = ['#4e79a7', '#f28e2b', '#e15759', '#76b7b2', '#59a14f'];
+            const proPieColors = ['#4e79a7', '#f28e2b', '#e15759', '#76b7b2', '#59a14f'];
+
+            new Chart(document.getElementById('modulesChart'), makeBarConfig(['Payment Gateway', 'Order Management', 'Product Catalog', 'Shipping & Logistics', 'User Accounts & Auth'], [11, 11, 11, 11, 11], proBarColors));
+            new Chart(document.getElementById('failureTypesChart'), makePieConfig(['Configuration Error', 'Authentication Failure', 'Concurrency Bug', 'Integration Timeout', 'Backend Service Bug'], [17, 14, 13, 12, 12], proPieColors));
+            new Chart(document.getElementById('environmentsChart'), makePieConfig(['PreProd', 'QA', 'UAT', 'Staging'], [30, 29, 27, 24], proPieColors));
+        </script>
+        <h2>Incidents Table (sorted by priority)</h2>
+        <div style="margin-bottom: 10px;">
+            <strong>Severity Legend:</strong>
+            <span style="background:#f8d7da; color:#333; padding:2px 8px; border-radius:4px; margin-right:8px;">High (&gt; 7)</span>
+            <span style="background:#fff3cd; color:#333; padding:2px 8px; border-radius:4px; margin-right:8px;">Medium (4 - 7)</span>
+            <span style="background:#d4edda; color:#333; padding:2px 8px; border-radius:4px;">Low (&lt; 4)</span>
         </div>
-        <div class="summary__spacer"></div>
-        <div class="controls">
-          <div class="filters">
-            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="failed" disabled/>
-            <span class="failed">0 Failed,</span>
-            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="passed" />
-            <span class="passed">4 Passed,</span>
-            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="skipped" disabled/>
-            <span class="skipped">0 Skipped,</span>
-            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="xfailed" disabled/>
-            <span class="xfailed">0 Expected failures,</span>
-            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="xpassed" disabled/>
-            <span class="xpassed">0 Unexpected passes,</span>
-            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="error" disabled/>
-            <span class="error">0 Errors,</span>
-            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="rerun" disabled/>
-            <span class="rerun">0 Reruns</span>
-          </div>
-          <div class="collapse">
-            <button id="show_all_details">Show all details</button>&nbsp;/&nbsp;<button id="hide_all_details">Hide all details</button>
-          </div>
-        </div>
-      </div>
-      <div class="additional-summary summary">
-      </div>
-      <div class="additional-summary postfix">
-      </div>
-    </div>
-    <table id="results-table">
-      <thead id="results-table-head">
-        <tr>
-          <th class="sortable" data-column-type="result">Result</th>
-          <th class="sortable" data-column-type="testId">Test</th>
-          <th class="sortable" data-column-type="duration">Duration</th>
-          <th>Links</th>
-        </tr>
-      </thead>
-    </table>
-  </body>
-  <footer>
-    <div id="data-container" data-jsonblob="{&#34;environment&#34;: {&#34;Python&#34;: &#34;3.13.3&#34;, &#34;Platform&#34;: &#34;Windows-11-10.0.26100-SP0&#34;, &#34;Packages&#34;: {&#34;pytest&#34;: &#34;8.4.2&#34;, &#34;pluggy&#34;: &#34;1.6.0&#34;}, &#34;Plugins&#34;: {&#34;allure-pytest&#34;: &#34;2.15.0&#34;, &#34;html&#34;: &#34;4.1.1&#34;, &#34;metadata&#34;: &#34;3.1.1&#34;}, &#34;JAVA_HOME&#34;: &#34;C:\\Program Files\\OpenJDK\\jdk-21&#34;}, &#34;tests&#34;: {&#34;test_plan_test.py::TestPlanLogic::test_base_minutes&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;test_plan_test.py::TestPlanLogic::test_base_minutes&#34;, &#34;duration&#34;: &#34;1 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;test_plan_test.py::TestPlanLogic::test_base_minutes&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;1 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;test_plan_test.py::TestPlanLogic::test_final_minutes_and_priority&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;test_plan_test.py::TestPlanLogic::test_final_minutes_and_priority&#34;, &#34;duration&#34;: &#34;0 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;test_plan_test.py::TestPlanLogic::test_final_minutes_and_priority&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;0 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;test_plan_test.py::TestPlanLogic::test_module_priority&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;test_plan_test.py::TestPlanLogic::test_module_priority&#34;, &#34;duration&#34;: &#34;1 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;test_plan_test.py::TestPlanLogic::test_module_priority&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;1 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;test_plan_test.py::TestPlanLogic::test_multiplier&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;test_plan_test.py::TestPlanLogic::test_multiplier&#34;, &#34;duration&#34;: &#34;1 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;test_plan_test.py::TestPlanLogic::test_multiplier&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;1 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}]}, &#34;renderCollapsed&#34;: [&#34;passed&#34;], &#34;initialSort&#34;: &#34;result&#34;, &#34;title&#34;: &#34;report.html&#34;}"></div>
-    <script>
-      (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
-const { getCollapsedCategory, setCollapsedIds } = require('./storage.js')
-
-class DataManager {
-    setManager(data) {
-        const collapsedCategories = [...getCollapsedCategory(data.renderCollapsed)]
-        const collapsedIds = []
-        const tests = Object.values(data.tests).flat().map((test, index) => {
-            const collapsed = collapsedCategories.includes(test.result.toLowerCase())
-            const id = `test_${index}`
-            if (collapsed) {
-                collapsedIds.push(id)
-            }
-            return {
-                ...test,
-                id,
-                collapsed,
-            }
-        })
-        const dataBlob = { ...data, tests }
-        this.data = { ...dataBlob }
-        this.renderData = { ...dataBlob }
-        setCollapsedIds(collapsedIds)
-    }
-
-    get allData() {
-        return { ...this.data }
-    }
-
-    resetRender() {
-        this.renderData = { ...this.data }
-    }
-
-    setRender(data) {
-        this.renderData.tests = [...data]
-    }
-
-    toggleCollapsedItem(id) {
-        this.renderData.tests = this.renderData.tests.map((test) =>
-            test.id === id ? { ...test, collapsed: !test.collapsed } : test,
-        )
-    }
-
-    set allCollapsed(collapsed) {
-        this.renderData = { ...this.renderData, tests: [...this.renderData.tests.map((test) => (
-            { ...test, collapsed }
-        ))] }
-    }
-
-    get testSubset() {
-        return [...this.renderData.tests]
-    }
-
-    get environment() {
-        return this.renderData.environment
-    }
-
-    get initialSort() {
-        return this.data.initialSort
-    }
-}
-
-module.exports = {
-    manager: new DataManager(),
-}
-
-},{"./storage.js":8}],2:[function(require,module,exports){
-const mediaViewer = require('./mediaviewer.js')
-const templateEnvRow = document.getElementById('template_environment_row')
-const templateResult = document.getElementById('template_results-table__tbody')
-
-function htmlToElements(html) {
-    const temp = document.createElement('template')
-    temp.innerHTML = html
-    return temp.content.childNodes
-}
-
-const find = (selector, elem) => {
-    if (!elem) {
-        elem = document
-    }
-    return elem.querySelector(selector)
-}
-
-const findAll = (selector, elem) => {
-    if (!elem) {
-        elem = document
-    }
-    return [...elem.querySelectorAll(selector)]
-}
-
-const dom = {
-    getStaticRow: (key, value) => {
-        const envRow = templateEnvRow.content.cloneNode(true)
-        const isObj = typeof value === 'object' && value !== null
-        const values = isObj ? Object.keys(value).map((k) => `${k}: ${value[k]}`) : null
-
-        const valuesElement = htmlToElements(
-            values ? `<ul>${values.map((val) => `<li>${val}</li>`).join('')}<ul>` : `<div>${value}</div>`)[0]
-        const td = findAll('td', envRow)
-        td[0].textContent = key
-        td[1].appendChild(valuesElement)
-
-        return envRow
-    },
-    getResultTBody: ({ testId, id, log, extras, resultsTableRow, tableHtml, result, collapsed }) => {
-        const resultBody = templateResult.content.cloneNode(true)
-        resultBody.querySelector('tbody').classList.add(result.toLowerCase())
-        resultBody.querySelector('tbody').id = testId
-        resultBody.querySelector('.collapsible').dataset.id = id
-
-        resultsTableRow.forEach((html) => {
-            const t = document.createElement('template')
-            t.innerHTML = html
-            resultBody.querySelector('.collapsible').appendChild(t.content)
-        })
-
-        if (log) {
-            // Wrap lines starting with "E" with span.error to color those lines red
-            const wrappedLog = log.replace(/^E.*$/gm, (match) => `<span class="error">${match}</span>`)
-            resultBody.querySelector('.log').innerHTML = wrappedLog
-        } else {
-            resultBody.querySelector('.log').remove()
-        }
-
-        if (collapsed) {
-            resultBody.querySelector('.collapsible > td')?.classList.add('collapsed')
-            resultBody.querySelector('.extras-row').classList.add('hidden')
-        } else {
-            resultBody.querySelector('.collapsible > td')?.classList.remove('collapsed')
-        }
-
-        const media = []
-        extras?.forEach(({ name, format_type, content }) => {
-            if (['image', 'video'].includes(format_type)) {
-                media.push({ path: content, name, format_type })
-            }
-
-            if (format_type === 'html') {
-                resultBody.querySelector('.extraHTML').insertAdjacentHTML('beforeend', `<div>${content}</div>`)
-            }
-        })
-        mediaViewer.setup(resultBody, media)
-
-        // Add custom html from the pytest_html_results_table_html hook
-        tableHtml?.forEach((item) => {
-            resultBody.querySelector('td[class="extra"]').insertAdjacentHTML('beforeend', item)
-        })
-
-        return resultBody
-    },
-}
-
-module.exports = {
-    dom,
-    htmlToElements,
-    find,
-    findAll,
-}
-
-},{"./mediaviewer.js":6}],3:[function(require,module,exports){
-const { manager } = require('./datamanager.js')
-const { doSort } = require('./sort.js')
-const storageModule = require('./storage.js')
-
-const getFilteredSubSet = (filter) =>
-    manager.allData.tests.filter(({ result }) => filter.includes(result.toLowerCase()))
-
-const doInitFilter = () => {
-    const currentFilter = storageModule.getVisible()
-    const filteredSubset = getFilteredSubSet(currentFilter)
-    manager.setRender(filteredSubset)
-}
-
-const doFilter = (type, show) => {
-    if (show) {
-        storageModule.showCategory(type)
-    } else {
-        storageModule.hideCategory(type)
-    }
-
-    const currentFilter = storageModule.getVisible()
-    const filteredSubset = getFilteredSubSet(currentFilter)
-    manager.setRender(filteredSubset)
-
-    const sortColumn = storageModule.getSort()
-    doSort(sortColumn, true)
-}
-
-module.exports = {
-    doFilter,
-    doInitFilter,
-}
-
-},{"./datamanager.js":1,"./sort.js":7,"./storage.js":8}],4:[function(require,module,exports){
-const { redraw, bindEvents, renderStatic } = require('./main.js')
-const { doInitFilter } = require('./filter.js')
-const { doInitSort } = require('./sort.js')
-const { manager } = require('./datamanager.js')
-const data = JSON.parse(document.getElementById('data-container').dataset.jsonblob)
-
-function init() {
-    manager.setManager(data)
-    doInitFilter()
-    doInitSort()
-    renderStatic()
-    redraw()
-    bindEvents()
-}
-
-init()
-
-},{"./datamanager.js":1,"./filter.js":3,"./main.js":5,"./sort.js":7}],5:[function(require,module,exports){
-const { dom, find, findAll } = require('./dom.js')
-const { manager } = require('./datamanager.js')
-const { doSort } = require('./sort.js')
-const { doFilter } = require('./filter.js')
-const {
-    getVisible,
-    getCollapsedIds,
-    setCollapsedIds,
-    getSort,
-    getSortDirection,
-    possibleFilters,
-} = require('./storage.js')
-
-const removeChildren = (node) => {
-    while (node.firstChild) {
-        node.removeChild(node.firstChild)
-    }
-}
-
-const renderStatic = () => {
-    const renderEnvironmentTable = () => {
-        const environment = manager.environment
-        const rows = Object.keys(environment).map((key) => dom.getStaticRow(key, environment[key]))
-        const table = document.getElementById('environment')
-        removeChildren(table)
-        rows.forEach((row) => table.appendChild(row))
-    }
-    renderEnvironmentTable()
-}
-
-const addItemToggleListener = (elem) => {
-    elem.addEventListener('click', ({ target }) => {
-        const id = target.parentElement.dataset.id
-        manager.toggleCollapsedItem(id)
-
-        const collapsedIds = getCollapsedIds()
-        if (collapsedIds.includes(id)) {
-            const updated = collapsedIds.filter((item) => item !== id)
-            setCollapsedIds(updated)
-        } else {
-            collapsedIds.push(id)
-            setCollapsedIds(collapsedIds)
-        }
-        redraw()
-    })
-}
-
-const renderContent = (tests) => {
-    const sortAttr = getSort(manager.initialSort)
-    const sortAsc = JSON.parse(getSortDirection())
-    const rows = tests.map(dom.getResultTBody)
-    const table = document.getElementById('results-table')
-    const tableHeader = document.getElementById('results-table-head')
-
-    const newTable = document.createElement('table')
-    newTable.id = 'results-table'
-
-    // remove all sorting classes and set the relevant
-    findAll('.sortable', tableHeader).forEach((elem) => elem.classList.remove('asc', 'desc'))
-    tableHeader.querySelector(`.sortable[data-column-type="${sortAttr}"]`)?.classList.add(sortAsc ? 'desc' : 'asc')
-    newTable.appendChild(tableHeader)
-
-    if (!rows.length) {
-        const emptyTable = document.getElementById('template_results-table__body--empty').content.cloneNode(true)
-        newTable.appendChild(emptyTable)
-    } else {
-        rows.forEach((row) => {
-            if (!!row) {
-                findAll('.collapsible td:not(.col-links', row).forEach(addItemToggleListener)
-                find('.logexpander', row).addEventListener('click',
-                    (evt) => evt.target.parentNode.classList.toggle('expanded'),
-                )
-                newTable.appendChild(row)
-            }
-        })
-    }
-
-    table.replaceWith(newTable)
-}
-
-const renderDerived = () => {
-    const currentFilter = getVisible()
-    possibleFilters.forEach((result) => {
-        const input = document.querySelector(`input[data-test-result="${result}"]`)
-        input.checked = currentFilter.includes(result)
-    })
-}
-
-const bindEvents = () => {
-    const filterColumn = (evt) => {
-        const { target: element } = evt
-        const { testResult } = element.dataset
-
-        doFilter(testResult, element.checked)
-        const collapsedIds = getCollapsedIds()
-        const updated = manager.renderData.tests.map((test) => {
-            return {
-                ...test,
-                collapsed: collapsedIds.includes(test.id),
-            }
-        })
-        manager.setRender(updated)
-        redraw()
-    }
-
-    const header = document.getElementById('environment-header')
-    header.addEventListener('click', () => {
-        const table = document.getElementById('environment')
-        table.classList.toggle('hidden')
-        header.classList.toggle('collapsed')
-    })
-
-    findAll('input[name="filter_checkbox"]').forEach((elem) => {
-        elem.addEventListener('click', filterColumn)
-    })
-
-    findAll('.sortable').forEach((elem) => {
-        elem.addEventListener('click', (evt) => {
-            const { target: element } = evt
-            const { columnType } = element.dataset
-            doSort(columnType)
-            redraw()
-        })
-    })
-
-    document.getElementById('show_all_details').addEventListener('click', () => {
-        manager.allCollapsed = false
-        setCollapsedIds([])
-        redraw()
-    })
-    document.getElementById('hide_all_details').addEventListener('click', () => {
-        manager.allCollapsed = true
-        const allIds = manager.renderData.tests.map((test) => test.id)
-        setCollapsedIds(allIds)
-        redraw()
-    })
-}
-
-const redraw = () => {
-    const { testSubset } = manager
-
-    renderContent(testSubset)
-    renderDerived()
-}
-
-module.exports = {
-    redraw,
-    bindEvents,
-    renderStatic,
-}
-
-},{"./datamanager.js":1,"./dom.js":2,"./filter.js":3,"./sort.js":7,"./storage.js":8}],6:[function(require,module,exports){
-class MediaViewer {
-    constructor(assets) {
-        this.assets = assets
-        this.index = 0
-    }
-
-    nextActive() {
-        this.index = this.index === this.assets.length - 1 ? 0 : this.index + 1
-        return [this.activeFile, this.index]
-    }
-
-    prevActive() {
-        this.index = this.index === 0 ? this.assets.length - 1 : this.index -1
-        return [this.activeFile, this.index]
-    }
-
-    get currentIndex() {
-        return this.index
-    }
-
-    get activeFile() {
-        return this.assets[this.index]
-    }
-}
-
-
-const setup = (resultBody, assets) => {
-    if (!assets.length) {
-        resultBody.querySelector('.media').classList.add('hidden')
-        return
-    }
-
-    const mediaViewer = new MediaViewer(assets)
-    const container = resultBody.querySelector('.media-container')
-    const leftArrow = resultBody.querySelector('.media-container__nav--left')
-    const rightArrow = resultBody.querySelector('.media-container__nav--right')
-    const mediaName = resultBody.querySelector('.media__name')
-    const counter = resultBody.querySelector('.media__counter')
-    const imageEl = resultBody.querySelector('img')
-    const sourceEl = resultBody.querySelector('source')
-    const videoEl = resultBody.querySelector('video')
-
-    const setImg = (media, index) => {
-        if (media?.format_type === 'image') {
-            imageEl.src = media.path
-
-            imageEl.classList.remove('hidden')
-            videoEl.classList.add('hidden')
-        } else if (media?.format_type === 'video') {
-            sourceEl.src = media.path
-
-            videoEl.classList.remove('hidden')
-            imageEl.classList.add('hidden')
-        }
-
-        mediaName.innerText = media?.name
-        counter.innerText = `${index + 1} / ${assets.length}`
-    }
-    setImg(mediaViewer.activeFile, mediaViewer.currentIndex)
-
-    const moveLeft = () => {
-        const [media, index] = mediaViewer.prevActive()
-        setImg(media, index)
-    }
-    const doRight = () => {
-        const [media, index] = mediaViewer.nextActive()
-        setImg(media, index)
-    }
-    const openImg = () => {
-        window.open(mediaViewer.activeFile.path, '_blank')
-    }
-    if (assets.length === 1) {
-        container.classList.add('media-container--fullscreen')
-    } else {
-        leftArrow.addEventListener('click', moveLeft)
-        rightArrow.addEventListener('click', doRight)
-    }
-    imageEl.addEventListener('click', openImg)
-}
-
-module.exports = {
-    setup,
-}
-
-},{}],7:[function(require,module,exports){
-const { manager } = require('./datamanager.js')
-const storageModule = require('./storage.js')
-
-const genericSort = (list, key, ascending, customOrder) => {
-    let sorted
-    if (customOrder) {
-        sorted = list.sort((a, b) => {
-            const aValue = a.result.toLowerCase()
-            const bValue = b.result.toLowerCase()
-
-            const aIndex = customOrder.findIndex((item) => item.toLowerCase() === aValue)
-            const bIndex = customOrder.findIndex((item) => item.toLowerCase() === bValue)
-
-            // Compare the indices to determine the sort order
-            return aIndex - bIndex
-        })
-    } else {
-        sorted = list.sort((a, b) => a[key] === b[key] ? 0 : a[key] > b[key] ? 1 : -1)
-    }
-
-    if (ascending) {
-        sorted.reverse()
-    }
-    return sorted
-}
-
-const durationSort = (list, ascending) => {
-    const parseDuration = (duration) => {
-        if (duration.includes(':')) {
-            // If it's in the format "HH:mm:ss"
-            const [hours, minutes, seconds] = duration.split(':').map(Number)
-            return (hours * 3600 + minutes * 60 + seconds) * 1000
-        } else {
-            // If it's in the format "nnn ms"
-            return parseInt(duration)
-        }
-    }
-    const sorted = list.sort((a, b) => parseDuration(a['duration']) - parseDuration(b['duration']))
-    if (ascending) {
-        sorted.reverse()
-    }
-    return sorted
-}
-
-const doInitSort = () => {
-    const type = storageModule.getSort(manager.initialSort)
-    const ascending = storageModule.getSortDirection()
-    const list = manager.testSubset
-    const initialOrder = ['Error', 'Failed', 'Rerun', 'XFailed', 'XPassed', 'Skipped', 'Passed']
-
-    storageModule.setSort(type)
-    storageModule.setSortDirection(ascending)
-
-    if (type?.toLowerCase() === 'original') {
-        manager.setRender(list)
-    } else {
-        let sortedList
-        switch (type) {
-        case 'duration':
-            sortedList = durationSort(list, ascending)
-            break
-        case 'result':
-            sortedList = genericSort(list, type, ascending, initialOrder)
-            break
-        default:
-            sortedList = genericSort(list, type, ascending)
-            break
-        }
-        manager.setRender(sortedList)
-    }
-}
-
-const doSort = (type, skipDirection) => {
-    const newSortType = storageModule.getSort(manager.initialSort) !== type
-    const currentAsc = storageModule.getSortDirection()
-    let ascending
-    if (skipDirection) {
-        ascending = currentAsc
-    } else {
-        ascending = newSortType ? false : !currentAsc
-    }
-    storageModule.setSort(type)
-    storageModule.setSortDirection(ascending)
-
-    const list = manager.testSubset
-    const sortedList = type === 'duration' ? durationSort(list, ascending) : genericSort(list, type, ascending)
-    manager.setRender(sortedList)
-}
-
-module.exports = {
-    doInitSort,
-    doSort,
-}
-
-},{"./datamanager.js":1,"./storage.js":8}],8:[function(require,module,exports){
-const possibleFilters = [
-    'passed',
-    'skipped',
-    'failed',
-    'error',
-    'xfailed',
-    'xpassed',
-    'rerun',
-]
-
-const getVisible = () => {
-    const url = new URL(window.location.href)
-    const settings = new URLSearchParams(url.search).get('visible')
-    const lower = (item) => {
-        const lowerItem = item.toLowerCase()
-        if (possibleFilters.includes(lowerItem)) {
-            return lowerItem
-        }
-        return null
-    }
-    return settings === null ?
-        possibleFilters :
-        [...new Set(settings?.split(',').map(lower).filter((item) => item))]
-}
-
-const hideCategory = (categoryToHide) => {
-    const url = new URL(window.location.href)
-    const visibleParams = new URLSearchParams(url.search).get('visible')
-    const currentVisible = visibleParams ? visibleParams.split(',') : [...possibleFilters]
-    const settings = [...new Set(currentVisible)].filter((f) => f !== categoryToHide).join(',')
-
-    url.searchParams.set('visible', settings)
-    window.history.pushState({}, null, unescape(url.href))
-}
-
-const showCategory = (categoryToShow) => {
-    if (typeof window === 'undefined') {
-        return
-    }
-    const url = new URL(window.location.href)
-    const currentVisible = new URLSearchParams(url.search).get('visible')?.split(',').filter(Boolean) ||
-        [...possibleFilters]
-    const settings = [...new Set([categoryToShow, ...currentVisible])]
-    const noFilter = possibleFilters.length === settings.length || !settings.length
-
-    noFilter ? url.searchParams.delete('visible') : url.searchParams.set('visible', settings.join(','))
-    window.history.pushState({}, null, unescape(url.href))
-}
-
-const getSort = (initialSort) => {
-    const url = new URL(window.location.href)
-    let sort = new URLSearchParams(url.search).get('sort')
-    if (!sort) {
-        sort = initialSort || 'result'
-    }
-    return sort
-}
-
-const setSort = (type) => {
-    const url = new URL(window.location.href)
-    url.searchParams.set('sort', type)
-    window.history.pushState({}, null, unescape(url.href))
-}
-
-const getCollapsedCategory = (renderCollapsed) => {
-    let categories
-    if (typeof window !== 'undefined') {
-        const url = new URL(window.location.href)
-        const collapsedItems = new URLSearchParams(url.search).get('collapsed')
-        switch (true) {
-        case !renderCollapsed && collapsedItems === null:
-            categories = ['passed']
-            break
-        case collapsedItems?.length === 0 || /^["']{2}$/.test(collapsedItems):
-            categories = []
-            break
-        case /^all$/.test(collapsedItems) || collapsedItems === null && /^all$/.test(renderCollapsed):
-            categories = [...possibleFilters]
-            break
-        default:
-            categories = collapsedItems?.split(',').map((item) => item.toLowerCase()) || renderCollapsed
-            break
-        }
-    } else {
-        categories = []
-    }
-    return categories
-}
-
-const getSortDirection = () => JSON.parse(sessionStorage.getItem('sortAsc')) || false
-const setSortDirection = (ascending) => sessionStorage.setItem('sortAsc', ascending)
-
-const getCollapsedIds = () => JSON.parse(sessionStorage.getItem('collapsedIds')) || []
-const setCollapsedIds = (list) => sessionStorage.setItem('collapsedIds', JSON.stringify(list))
-
-module.exports = {
-    getVisible,
-    hideCategory,
-    showCategory,
-    getCollapsedIds,
-    setCollapsedIds,
-    getSort,
-    setSort,
-    getSortDirection,
-    setSortDirection,
-    getCollapsedCategory,
-    possibleFilters,
-}
-
-},{}]},{},[4]);
-    </script>
-  </footer>
-</html>
+        <table>
+            <tr>
+                <th>Test ID</th>
+                <th>Module</th>
+                <th>Environment</th>
+                <th>Failure Type</th>
+                <th>Impacted Layers</th>
+                <th>Base Minutes</th>
+                <th>Final Minutes</th>
+                <th>Priority Score</th>
+            </tr>
+    <tr class="high"><td>4edee06f-42bf-4fc5-a4f0-af4d7f51b388</td><td>Payment Gateway</td><td>PreProd</td><td>Data Freshness Breach</td><td>Client App, API Gateway, PaymentService, External Provider</td><td>30</td><td>50.4</td><td>8.4</td></tr><tr class="high"><td>bec39de6-6f18-4e43-9ee6-c34e91903e06</td><td>Order Management</td><td>PreProd</td><td>Concurrency Bug</td><td>Client App, OrderService, CartService, DB (Postgres)</td><td>40</td><td>60</td><td>7.8</td></tr><tr class="high"><td>05f6d0da-04b1-43c3-b254-1382fbc3a218</td><td>Payment Gateway</td><td>PreProd</td><td>Concurrency Bug</td><td>PaymentService, Webhook Handler, Queue (SQS), DB (MySQL)</td><td>40</td><td>60</td><td>7.8</td></tr><tr class="high"><td>a4613e5a-01ea-49e9-ba07-b1cd7e7a64dc</td><td>Payment Gateway</td><td>PreProd</td><td>Concurrency Bug</td><td>Client App, API Gateway, PaymentService, External Provider</td><td>30</td><td>46.8</td><td>7.8</td></tr><tr class="high"><td>4a751f37-7eef-4a36-9865-3b70fed1676c</td><td>Order Management</td><td>PreProd</td><td>Authentication Failure</td><td>API Gateway, Orchestrator, PaymentService, InventoryService, Queue (Kafka)</td><td>42</td><td>60</td><td>7.2</td></tr><tr class="high"><td>cb489685-3ce9-4a0c-ad4d-f7f3479fbb5b</td><td>Payment Gateway</td><td>PreProd</td><td>Authentication Failure</td><td>Client App, API Gateway, PaymentService, External Provider</td><td>30</td><td>43.2</td><td>7.2</td></tr><tr class="high"><td>42fcea7f-c0cc-4496-8333-70e46775357b</td><td>Payment Gateway</td><td>PreProd</td><td>Integration Timeout</td><td>Client App, API Gateway, PaymentService, External Provider</td><td>30</td><td>43.2</td><td>7.2</td></tr><tr class="medium"><td>6061b16e-36fa-4ff6-bb3e-dd9356a89bc9</td><td>Payment Gateway</td><td>PreProd</td><td>Backend Service Bug</td><td>Client App, API Gateway, PaymentService, External Provider</td><td>30</td><td>39.6</td><td>6.6</td></tr><tr class="medium"><td>7927cb45-cfaa-4295-aced-9619c356d048</td><td>Product Catalog</td><td>PreProd</td><td>Concurrency Bug</td><td>API Gateway, Catalog Service, Cache (Redis), DB (Postgres)</td><td>38</td><td>59.3</td><td>6.2</td></tr><tr class="medium"><td>1dfff9fb-3cf8-45d3-a168-08662619b5d6</td><td>Shipping & Logistics</td><td>PreProd</td><td>Concurrency Bug</td><td>Client App, OrderService, ShippingService, Geo Service</td><td>44</td><td>60</td><td>6.2</td></tr><tr class="medium"><td>412d27c6-4e9d-4d49-a197-8898b8f076b1</td><td>Payment Gateway</td><td>Staging</td><td>Concurrency Bug</td><td>Client App, API Gateway, PaymentService, External Provider</td><td>30</td><td>37.1</td><td>6.2</td></tr><tr class="medium"><td>ea254172-783d-4ac6-ade4-06442c194878</td><td>Payment Gateway</td><td>PreProd</td><td>Unknown</td><td>PaymentService, Webhook Handler, Queue (SQS), DB (MySQL)</td><td>40</td><td>48.0</td><td>6.0</td></tr><tr class="medium"><td>4eac02d4-e4de-473e-9c0c-cd9f0f3520e1</td><td>Payment Gateway</td><td>QA</td><td>Concurrency Bug</td><td>PaymentService, Webhook Handler, Queue (SQS), DB (MySQL)</td><td>40</td><td>46.8</td><td>5.8</td></tr><tr class="medium"><td>a7d2bccf-9a22-4e10-b0e8-81286be75598</td><td>Product Catalog</td><td>PreProd</td><td>Integration Timeout</td><td>API Gateway, Catalog Service, Cache (Redis), DB (Postgres)</td><td>38</td><td>54.7</td><td>5.8</td></tr><tr class="medium"><td>b8216bb6-cd12-4f1e-a1bf-86494f5adce8</td><td>Product Catalog</td><td>PreProd</td><td>Data Integrity Issue</td><td>API Gateway, Catalog Service, Cache (Redis), DB (Postgres)</td><td>38</td><td>54.7</td><td>5.8</td></tr><tr class="medium"><td>32471f99-d534-4fb5-8edf-53cda3297bb1</td><td>Shipping & Logistics</td><td>PreProd</td><td>Authentication Failure</td><td>Client App, OrderService, ShippingService, Geo Service</td><td>44</td><td>60</td><td>5.8</td></tr><tr class="medium"><td>588dc79f-ee70-40d8-9b72-42e1893e90c0</td><td>Shipping & Logistics</td><td>PreProd</td><td>Authentication Failure</td><td>Client App, OrderService, ShippingService, Geo Service</td><td>44</td><td>60</td><td>5.8</td></tr><tr class="medium"><td>3e042522-2719-4d60-98e8-8190f2dde8a0</td><td>Order Management</td><td>Staging</td><td>Authentication Failure</td><td>API Gateway, Orchestrator, PaymentService, InventoryService, Queue (Kafka)</td><td>42</td><td>47.9</td><td>5.7</td></tr><tr class="medium"><td>302a0a6e-84e6-481b-8f95-45dfd86bfc63</td><td>Shipping & Logistics</td><td>UAT</td><td>Data Freshness Breach</td><td>Client App, OrderService, ShippingService, Geo Service</td><td>44</td><td>60</td><td>5.6</td></tr><tr class="medium"><td>0b249e4e-2024-4587-b331-a3ddaf82dfe1</td><td>Order Management</td><td>UAT</td><td>Backend Service Bug</td><td>Client App, OrderService, CartService, DB (Postgres)</td><td>40</td><td>44.0</td><td>5.5</td></tr><tr class="medium"><td>d115788c-9dba-4b53-8dc1-499c9c875bcc</td><td>Order Management</td><td>UAT</td><td>External Dependency Failure</td><td>API Gateway, Orchestrator, PaymentService, InventoryService, Queue (Kafka)</td><td>42</td><td>46.2</td><td>5.5</td></tr><tr class="medium"><td>af9e2a13-e9f2-4901-a6a7-e4b38fa0f829</td><td>Order Management</td><td>UAT</td><td>External Dependency Failure</td><td>API Gateway, Orchestrator, PaymentService, InventoryService, Queue (Kafka)</td><td>42</td><td>46.2</td><td>5.5</td></tr><tr class="medium"><td>8f1c84fd-a889-4dab-8b1b-22c369a52b0f</td><td>Payment Gateway</td><td>UAT</td><td>Configuration Error</td><td>PaymentService, Webhook Handler, Queue (SQS), DB (MySQL)</td><td>40</td><td>44.0</td><td>5.5</td></tr><tr class="medium"><td>28907004-c2f7-40ce-ba4b-ac24b4d52340</td><td>Order Management</td><td>QA</td><td>Data Integrity Issue</td><td>Client App, OrderService, CartService, DB (Postgres)</td><td>40</td><td>43.2</td><td>5.4</td></tr><tr class="medium"><td>3f14e542-ad08-41ef-8abc-50c7cc5f6680</td><td>Order Management</td><td>QA</td><td>Integration Timeout</td><td>API Gateway, Orchestrator, PaymentService, InventoryService, Queue (Kafka)</td><td>42</td><td>45.4</td><td>5.4</td></tr><tr class="medium"><td>17f9dae6-308c-4403-8417-e35441b110cf</td><td>User Accounts & Auth</td><td>Staging</td><td>Data Freshness Breach</td><td>API Gateway, AuthService, RateLimiter, DB (UserStore)</td><td>38</td><td>50.5</td><td>5.3</td></tr><tr class="medium"><td>0b4e410a-e9a4-4f8e-9a2a-3683c7cd7c5a</td><td>Product Catalog</td><td>PreProd</td><td>Configuration Error</td><td>Client App, API Gateway, Catalog Service, Search Index (Elasticsearch)</td><td>42</td><td>55.4</td><td>5.3</td></tr><tr class="medium"><td>dcfb2b2d-6a98-4d3e-9b11-f0efe3d56d15</td><td>User Accounts & Auth</td><td>PreProd</td><td>Configuration Error</td><td>API Gateway, AuthService, RateLimiter, DB (UserStore)</td><td>38</td><td>50.2</td><td>5.3</td></tr><tr class="medium"><td>33aaba78-240d-401c-ba65-92a82dbab21f</td><td>Order Management</td><td>Staging</td><td>Backend Service Bug</td><td>Client App, OrderService, CartService, DB (Postgres)</td><td>40</td><td>41.8</td><td>5.2</td></tr><tr class="medium"><td>5c06896e-2967-4667-92b4-a08b2e84bc2f</td><td>Customer Support & Returns</td><td>PreProd</td><td>Data Freshness Breach</td><td>RMAService, Attachment S3, Email Service, DB (Tickets)</td><td>38</td><td>60</td><td>5.0</td></tr><tr class="medium"><td>34dfcd2a-c6e8-4993-8389-2ba6909d4d69</td><td>Order Management</td><td>QA</td><td>Backend Service Bug</td><td>Client App, OrderService, CartService, DB (Postgres)</td><td>40</td><td>39.6</td><td>5.0</td></tr><tr class="medium"><td>ffbf2273-a08d-4ef6-a2e1-b00a6cb3aace</td><td>Payment Gateway</td><td>QA</td><td>Configuration Error</td><td>Client App, API Gateway, PaymentService, External Provider</td><td>30</td><td>29.7</td><td>5.0</td></tr><tr class="medium"><td>a999e296-45aa-4149-b742-609719f68bc7</td><td>Product Catalog</td><td>Staging</td><td>Concurrency Bug</td><td>Client App, API Gateway, Catalog Service, Search Index (Elasticsearch)</td><td>42</td><td>51.9</td><td>4.9</td></tr><tr class="medium"><td>7be054d7-8c2f-425f-aa67-e161c73ac49c</td><td>Product Catalog</td><td>UAT</td><td>Authentication Failure</td><td>API Gateway, Catalog Service, Cache (Redis), DB (Postgres)</td><td>38</td><td>45.6</td><td>4.8</td></tr><tr class="medium"><td>dc5904db-e8e0-4a55-8f37-802212962a53</td><td>Shipping & Logistics</td><td>UAT</td><td>Integration Timeout</td><td>ShippingService, Carrier API, Label Service, DB (MySQL)</td><td>44</td><td>52.8</td><td>4.8</td></tr><tr class="medium"><td>df9ddcac-6384-41fa-be73-f0eddd5f0347</td><td>User Accounts & Auth</td><td>UAT</td><td>Authentication Failure</td><td>Client App, AuthService, OAuth Provider, Cache (Redis)</td><td>38</td><td>45.6</td><td>4.8</td></tr><tr class="medium"><td>661cc990-13ab-4e6b-9745-879fb8c305bc</td><td>Order Management</td><td>Staging</td><td>Unknown</td><td>API Gateway, Orchestrator, PaymentService, InventoryService, Queue (Kafka)</td><td>42</td><td>39.9</td><td>4.8</td></tr><tr class="medium"><td>ad0cd724-b170-4058-953c-94f05b1de559</td><td>Promotions & Discounts</td><td>PreProd</td><td>Concurrency Bug</td><td>CheckoutService, PromoService, Clock, DB (MySQL)</td><td>40</td><td>60</td><td>4.7</td></tr><tr class="medium"><td>121e7350-90d8-4b01-8962-23f003726c66</td><td>Shipping & Logistics</td><td>QA</td><td>Concurrency Bug</td><td>Client App, OrderService, ShippingService, Geo Service</td><td>44</td><td>51.5</td><td>4.7</td></tr><tr class="medium"><td>9e34897d-4865-43d1-bb70-ba858005394c</td><td>User Accounts & Auth</td><td>QA</td><td>Concurrency Bug</td><td>API Gateway, AuthService, RateLimiter, DB (UserStore)</td><td>38</td><td>44.5</td><td>4.7</td></tr><tr class="medium"><td>06142f66-a01e-4d13-9f18-f7aed7fbd85b</td><td>Product Catalog</td><td>Staging</td><td>Data Integrity Issue</td><td>Client App, API Gateway, Catalog Service, Search Index (Elasticsearch)</td><td>42</td><td>47.9</td><td>4.6</td></tr><tr class="medium"><td>34724434-fbb9-4a3b-a447-136d2a0b86d2</td><td>Shipping & Logistics</td><td>Staging</td><td>Data Integrity Issue</td><td>ShippingService, Carrier API, Label Service, DB (MySQL)</td><td>44</td><td>50.2</td><td>4.6</td></tr><tr class="medium"><td>99c36c18-c1cf-4f0d-885a-aee9e5ed27e8</td><td>Shipping & Logistics</td><td>Staging</td><td>Data Integrity Issue</td><td>ShippingService, Carrier API, Label Service, DB (MySQL)</td><td>44</td><td>50.2</td><td>4.6</td></tr><tr class="medium"><td>e3e1cf9d-539f-4c57-bb4d-977ce5027952</td><td>User Accounts & Auth</td><td>Staging</td><td>Integration Timeout</td><td>Client App, AuthService, OAuth Provider, Cache (Redis)</td><td>38</td><td>43.3</td><td>4.6</td></tr><tr class="medium"><td>f547e2d6-9815-4a21-903f-b46a5be8138c</td><td>Shipping & Logistics</td><td>UAT</td><td>Configuration Error</td><td>Client App, OrderService, ShippingService, Geo Service</td><td>44</td><td>48.4</td><td>4.4</td></tr><tr class="medium"><td>1b99a377-0bed-49e0-a44b-ba4a229d6eb8</td><td>User Accounts & Auth</td><td>UAT</td><td>External Dependency Failure</td><td>API Gateway, AuthService, RateLimiter, DB (UserStore)</td><td>38</td><td>41.8</td><td>4.4</td></tr><tr class="medium"><td>e8e4a8f3-e439-4109-836b-791c147bb684</td><td>Analytics & Reporting</td><td>PreProd</td><td>Data Integrity Issue</td><td>Tracking SDK, Event Ingest, ETL Pipeline, Warehouse (BigQuery)</td><td>51</td><td>60</td><td>4.3</td></tr><tr class="medium"><td>dc988e32-49d1-4165-8fdd-a62fe3ed7b37</td><td>Inventory & Stock Control</td><td>PreProd</td><td>Integration Timeout</td><td>InventoryService, DB (Postgres), Cache (Redis), Queue (Kafka)</td><td>36</td><td>51.8</td><td>4.3</td></tr><tr class="medium"><td>fc2f1d32-9e3d-4fdb-8288-ecc3790b8d9e</td><td>Inventory & Stock Control</td><td>PreProd</td><td>Integration Timeout</td><td>InventoryService, DB (Postgres), Cache (Redis), Queue (Kafka)</td><td>36</td><td>51.8</td><td>4.3</td></tr><tr class="medium"><td>24af157e-b731-4329-b649-4866cf04a676</td><td>Notifications & Messaging</td><td>PreProd</td><td>Authentication Failure</td><td>Template Engine, NotificationService, DB (Templates)</td><td>30</td><td>43.2</td><td>4.3</td></tr><tr class="medium"><td>45da8d2c-c0be-4067-a884-e22603f9b2d3</td><td>Notifications & Messaging</td><td>PreProd</td><td>Integration Timeout</td><td>Template Engine, NotificationService, DB (Templates)</td><td>30</td><td>43.2</td><td>4.3</td></tr><tr class="medium"><td>31344ec7-a7bc-417a-b621-75d7c6116f6d</td><td>Promotions & Discounts</td><td>PreProd</td><td>Authentication Failure</td><td>PromoService, Cache (Redis), DB (Rules), Client App</td><td>36</td><td>51.8</td><td>4.3</td></tr><tr class="medium"><td>4d6e8f20-a1b8-4cb1-b690-54dbc2ef7c8b</td><td>Shipping & Logistics</td><td>QA</td><td>Data Integrity Issue</td><td>ShippingService, Carrier API, Label Service, DB (MySQL)</td><td>44</td><td>47.5</td><td>4.3</td></tr><tr class="medium"><td>3e333ef3-49ac-4c3f-96de-08df86fd6619</td><td>Customer Support & Returns</td><td>UAT</td><td>Data Freshness Breach</td><td>Client App, ChatProvider, SupportService, Webhook</td><td>36</td><td>50.4</td><td>4.2</td></tr><tr class="medium"><td>c9c99f1b-25e7-49e3-b9d8-748494329dbd</td><td>Promotions & Discounts</td><td>UAT</td><td>Data Freshness Breach</td><td>CheckoutService, PromoService, Clock, DB (MySQL)</td><td>40</td><td>56.0</td><td>4.2</td></tr><tr class="medium"><td>4d361381-f235-40ef-a296-63c736cf41e9</td><td>Product Catalog</td><td>Staging</td><td>Backend Service Bug</td><td>Client App, API Gateway, Catalog Service, Search Index (Elasticsearch)</td><td>42</td><td>43.9</td><td>4.2</td></tr><tr class="medium"><td>7b42551f-4dc9-4db9-bc9e-0c991182a736</td><td>User Accounts & Auth</td><td>Staging</td><td>Backend Service Bug</td><td>Client App, AuthService, OAuth Provider, Cache (Redis)</td><td>38</td><td>39.7</td><td>4.2</td></tr><tr class="medium"><td>008ddfdd-61f1-4dd6-8c5a-ef69dcb385ec</td><td>User Accounts & Auth</td><td>UAT</td><td>Unknown</td><td>Client App, AuthService, OAuth Provider, Cache (Redis)</td><td>38</td><td>38.0</td><td>4.0</td></tr><tr class="low"><td>29157a47-b853-46f6-9e44-3a715554dfbe</td><td>Analytics & Reporting</td><td>PreProd</td><td>Configuration Error</td><td>ReportService, Cache (Redis), Warehouse (Snowflake)</td><td>33</td><td>43.6</td><td>4.0</td></tr><tr class="low"><td>47e593fe-a5e8-471d-b680-8b7bada50329</td><td>Analytics & Reporting</td><td>PreProd</td><td>Configuration Error</td><td>ReportService, Cache (Redis), Warehouse (Snowflake)</td><td>33</td><td>43.6</td><td>4.0</td></tr><tr class="low"><td>006a8678-9a5b-4bc9-912b-8655878e0459</td><td>Inventory & Stock Control</td><td>PreProd</td><td>Configuration Error</td><td>OrderService, InventoryService, Reservation Subsystem</td><td>34</td><td>44.9</td><td>4.0</td></tr><tr class="low"><td>ae1e966d-977a-463f-960b-0eafaa0c985f</td><td>Product Catalog</td><td>QA</td><td>External Dependency Failure</td><td>API Gateway, Catalog Service, Cache (Redis), DB (Postgres)</td><td>38</td><td>37.6</td><td>4.0</td></tr><tr class="low"><td>e50f53da-4871-44a3-aeb3-d6063cd91245</td><td>Product Catalog</td><td>QA</td><td>Configuration Error</td><td>API Gateway, Catalog Service, Cache (Redis), DB (Postgres)</td><td>38</td><td>37.6</td><td>4.0</td></tr><tr class="low"><td>faa64072-7a01-444f-a8ee-d50733c94d8d</td><td>User Accounts & Auth</td><td>QA</td><td>External Dependency Failure</td><td>API Gateway, AuthService, RateLimiter, DB (UserStore)</td><td>38</td><td>37.6</td><td>4.0</td></tr><tr class="low"><td>10d10644-2ed3-4d68-8bec-38cd31f00c69</td><td>User Accounts & Auth</td><td>QA</td><td>External Dependency Failure</td><td>API Gateway, AuthService, RateLimiter, DB (UserStore)</td><td>38</td><td>37.6</td><td>4.0</td></tr><tr class="low"><td>17dcf2b9-e69a-403f-8118-2bab8d860c05</td><td>User Accounts & Auth</td><td>QA</td><td>Backend Service Bug</td><td>Client App, AuthService, OAuth Provider, Cache (Redis)</td><td>38</td><td>37.6</td><td>4.0</td></tr><tr class="low"><td>285304a3-fdd6-40ae-b104-88e25ac42e29</td><td>Promotions & Discounts</td><td>UAT</td><td>Concurrency Bug</td><td>CheckoutService, PromoService, Clock, DB (MySQL)</td><td>40</td><td>52.0</td><td>3.9</td></tr><tr class="low"><td>925f4d99-84fa-4a19-8a25-5218a52cdc9d</td><td>Product Catalog</td><td>Staging</td><td>Unknown</td><td>API Gateway, Catalog Service, Cache (Redis), DB (Postgres)</td><td>38</td><td>36.1</td><td>3.8</td></tr><tr class="low"><td>4f2d850c-9667-410f-a9a1-46fc2fd84ce2</td><td>Shipping & Logistics</td><td>Staging</td><td>Unknown</td><td>Client App, OrderService, ShippingService, Geo Service</td><td>44</td><td>41.8</td><td>3.8</td></tr><tr class="low"><td>9555e37e-9087-47f6-9fd4-19303ea83513</td><td>Analytics & Reporting</td><td>QA</td><td>Data Freshness Breach</td><td>Tracking SDK, Event Ingest, ETL Pipeline, Warehouse (BigQuery)</td><td>51</td><td>60</td><td>3.8</td></tr><tr class="low"><td>bee328a1-7c38-4d1c-a3c7-1841c5a1796b</td><td>Customer Support & Returns</td><td>QA</td><td>Data Freshness Breach</td><td>Client App, ChatProvider, SupportService, Webhook</td><td>36</td><td>45.4</td><td>3.8</td></tr><tr class="low"><td>a7693bde-19f6-406a-99a6-a97674c6f028</td><td>Promotions & Discounts</td><td>QA</td><td>Data Freshness Breach</td><td>CheckoutService, PromoService, Clock, DB (MySQL)</td><td>40</td><td>50.4</td><td>3.8</td></tr><tr class="low"><td>7979c8d3-b0d6-4218-9b4b-95034d2952bf</td><td>Notifications & Messaging</td><td>Staging</td><td>Concurrency Bug</td><td>Template Engine, NotificationService, DB (Templates)</td><td>30</td><td>37.1</td><td>3.7</td></tr><tr class="low"><td>7247ac08-15f4-4cce-bbb6-5dc5240da168</td><td>Customer Support & Returns</td><td>UAT</td><td>Data Integrity Issue</td><td>Client App, ChatProvider, SupportService, Webhook</td><td>36</td><td>43.2</td><td>3.6</td></tr><tr class="low"><td>aee9d23a-f977-4e2f-b3fe-8fe0b860e500</td><td>Inventory & Stock Control</td><td>UAT</td><td>Data Integrity Issue</td><td>InventoryService, DB (Postgres), Cache (Redis), Queue (Kafka)</td><td>36</td><td>43.2</td><td>3.6</td></tr><tr class="low"><td>dfbadfc3-4a8c-4968-9814-64b2ced9c8d0</td><td>Notifications & Messaging</td><td>UAT</td><td>Authentication Failure</td><td>NotificationService, SMTP, PushGateway, SMS Provider</td><td>36</td><td>43.2</td><td>3.6</td></tr><tr class="low"><td>66b0b418-ceac-4ae6-8b2d-8a894f560606</td><td>Notifications & Messaging</td><td>PreProd</td><td>Unknown</td><td>NotificationService, SMTP, PushGateway, SMS Provider</td><td>36</td><td>43.2</td><td>3.6</td></tr><tr class="low"><td>3fbf6d00-f2db-4886-8605-ce9096b89384</td><td>Notifications & Messaging</td><td>UAT</td><td>Authentication Failure</td><td>Template Engine, NotificationService, DB (Templates)</td><td>30</td><td>36.0</td><td>3.6</td></tr><tr class="low"><td>630ad24e-0414-4c6e-8547-44b50d5a428c</td><td>Promotions & Discounts</td><td>PreProd</td><td>Unknown</td><td>CheckoutService, PromoService, Clock, DB (MySQL)</td><td>40</td><td>48.0</td><td>3.6</td></tr><tr class="low"><td>2c81184d-b51d-4a72-9d9b-80a855c984d9</td><td>Analytics & Reporting</td><td>Staging</td><td>Authentication Failure</td><td>Tracking SDK, Event Ingest, ETL Pipeline, Warehouse (BigQuery)</td><td>51</td><td>58.1</td><td>3.4</td></tr><tr class="low"><td>1b054960-92a6-4c67-abea-3b9792e4d000</td><td>Customer Support & Returns</td><td>Staging</td><td>Integration Timeout</td><td>Client App, ChatProvider, SupportService, Webhook</td><td>36</td><td>41.0</td><td>3.4</td></tr><tr class="low"><td>7779fcf8-056a-42c8-8dc5-5d34438779b4</td><td>Promotions & Discounts</td><td>Staging</td><td>Data Integrity Issue</td><td>CheckoutService, PromoService, Clock, DB (MySQL)</td><td>40</td><td>45.6</td><td>3.4</td></tr><tr class="low"><td>6d740d05-436b-4c8d-979e-034d447e8b9e</td><td>Promotions & Discounts</td><td>Staging</td><td>Authentication Failure</td><td>PromoService, Cache (Redis), DB (Rules), Client App</td><td>36</td><td>41.0</td><td>3.4</td></tr><tr class="low"><td>3334e409-9f17-4dd9-94b8-8feb2826309e</td><td>Analytics & Reporting</td><td>UAT</td><td>Backend Service Bug</td><td>Tracking SDK, Event Ingest, ETL Pipeline, Warehouse (BigQuery)</td><td>51</td><td>56.1</td><td>3.3</td></tr><tr class="low"><td>02bc0660-fa15-4fb9-b150-a3a5a237d584</td><td>Customer Support & Returns</td><td>UAT</td><td>Configuration Error</td><td>RMAService, Attachment S3, Email Service, DB (Tickets)</td><td>38</td><td>41.8</td><td>3.3</td></tr><tr class="low"><td>f7fb97ae-3ad9-4ca4-99e8-e6215d903395</td><td>Customer Support & Returns</td><td>UAT</td><td>Configuration Error</td><td>Client App, ChatProvider, SupportService, Webhook</td><td>36</td><td>39.6</td><td>3.3</td></tr><tr class="low"><td>3057e32c-3f9b-446e-9ea2-ee7dde7b3051</td><td>Inventory & Stock Control</td><td>UAT</td><td>Backend Service Bug</td><td>OrderService, InventoryService, Reservation Subsystem</td><td>34</td><td>37.4</td><td>3.3</td></tr><tr class="low"><td>19efdc1e-e010-4f09-a189-9770861a2804</td><td>Inventory & Stock Control</td><td>UAT</td><td>External Dependency Failure</td><td>OrderService, InventoryService, Reservation Subsystem</td><td>34</td><td>37.4</td><td>3.3</td></tr><tr class="low"><td>b4debc20-5556-4802-9acd-97e065862094</td><td>Inventory & Stock Control</td><td>UAT</td><td>Backend Service Bug</td><td>InventoryService, DB (Postgres), Cache (Redis), Queue (Kafka)</td><td>36</td><td>39.6</td><td>3.3</td></tr><tr class="low"><td>1ad2ac93-9534-4279-81c0-0bb8d50efb29</td><td>Notifications & Messaging</td><td>UAT</td><td>Backend Service Bug</td><td>NotificationService, SMTP, PushGateway, SMS Provider</td><td>36</td><td>39.6</td><td>3.3</td></tr><tr class="low"><td>975edd64-044d-49f2-9813-996ca60fb58b</td><td>Promotions & Discounts</td><td>UAT</td><td>External Dependency Failure</td><td>PromoService, Cache (Redis), DB (Rules), Client App</td><td>36</td><td>39.6</td><td>3.3</td></tr><tr class="low"><td>fa4fb469-7b39-4698-9bc6-6ac8f69781ae</td><td>Customer Support & Returns</td><td>QA</td><td>Data Integrity Issue</td><td>RMAService, Attachment S3, Email Service, DB (Tickets)</td><td>38</td><td>41.0</td><td>3.2</td></tr><tr class="low"><td>38d61dff-a446-489b-9b04-79aab2f8923b</td><td>Inventory & Stock Control</td><td>QA</td><td>Data Integrity Issue</td><td>OrderService, InventoryService, Reservation Subsystem</td><td>34</td><td>36.7</td><td>3.2</td></tr><tr class="low"><td>04edb97c-4dff-49c2-a43d-d923520c452a</td><td>Notifications & Messaging</td><td>QA</td><td>Integration Timeout</td><td>Template Engine, NotificationService, DB (Templates)</td><td>30</td><td>32.4</td><td>3.2</td></tr><tr class="low"><td>0b03ad21-69bc-4fd5-8ed9-7a7cf1c9feb9</td><td>Notifications & Messaging</td><td>QA</td><td>Integration Timeout</td><td>NotificationService, SMTP, PushGateway, SMS Provider</td><td>36</td><td>38.9</td><td>3.2</td></tr><tr class="low"><td>482869d6-5aa3-4a68-b5bd-2b74a1becc18</td><td>Notifications & Messaging</td><td>QA</td><td>Authentication Failure</td><td>Template Engine, NotificationService, DB (Templates)</td><td>30</td><td>32.4</td><td>3.2</td></tr><tr class="low"><td>f346b6ac-019c-47d1-b884-50c4dd49589b</td><td>Promotions & Discounts</td><td>QA</td><td>Integration Timeout</td><td>CheckoutService, PromoService, Clock, DB (MySQL)</td><td>40</td><td>43.2</td><td>3.2</td></tr><tr class="low"><td>b3b80586-7c6e-4830-8f1d-217e36f0af31</td><td>Customer Support & Returns</td><td>Staging</td><td>Configuration Error</td><td>Client App, ChatProvider, SupportService, Webhook</td><td>36</td><td>37.6</td><td>3.1</td></tr><tr class="low"><td>337fcf25-e4a8-4b52-bb61-6528de6ed56a</td><td>Customer Support & Returns</td><td>Staging</td><td>External Dependency Failure</td><td>Client App, ChatProvider, SupportService, Webhook</td><td>36</td><td>37.6</td><td>3.1</td></tr><tr class="low"><td>7d099564-a3de-4c79-88bc-bab71d4a4cd4</td><td>Inventory & Stock Control</td><td>Staging</td><td>Backend Service Bug</td><td>OrderService, InventoryService, Reservation Subsystem</td><td>34</td><td>35.5</td><td>3.1</td></tr><tr class="low"><td>46c2ab0e-0fcd-4756-96b9-006fe0572504</td><td>Inventory & Stock Control</td><td>Staging</td><td>External Dependency Failure</td><td>InventoryService, DB (Postgres), Cache (Redis), Queue (Kafka)</td><td>36</td><td>37.6</td><td>3.1</td></tr><tr class="low"><td>0daed823-bf45-4a2e-b450-f6ffe871b4f5</td><td>Analytics & Reporting</td><td>UAT</td><td>Unknown</td><td>Tracking SDK, Event Ingest, ETL Pipeline, Warehouse (BigQuery)</td><td>51</td><td>51.0</td><td>3.0</td></tr><tr class="low"><td>87849d00-241e-4390-8922-7f75006d044a</td><td>Analytics & Reporting</td><td>QA</td><td>External Dependency Failure</td><td>Tracking SDK, Event Ingest, ETL Pipeline, Warehouse (BigQuery)</td><td>51</td><td>50.5</td><td>3.0</td></tr><tr class="low"><td>d30f3f58-eabf-4e0e-9cc6-9e3500365c51</td><td>Analytics & Reporting</td><td>QA</td><td>Configuration Error</td><td>ReportService, Cache (Redis), Warehouse (Snowflake)</td><td>33</td><td>32.7</td><td>3.0</td></tr><tr class="low"><td>7bb7070a-6710-4e1e-a7ab-12e3d0063d88</td><td>Analytics & Reporting</td><td>QA</td><td>Configuration Error</td><td>Tracking SDK, Event Ingest, ETL Pipeline, Warehouse (BigQuery)</td><td>51</td><td>50.5</td><td>3.0</td></tr><tr class="low"><td>244f7c16-384c-4e5e-8f08-15b327630cc7</td><td>Analytics & Reporting</td><td>QA</td><td>Configuration Error</td><td>Tracking SDK, Event Ingest, ETL Pipeline, Warehouse (BigQuery)</td><td>51</td><td>50.5</td><td>3.0</td></tr><tr class="low"><td>3a0a9576-ddaa-4692-9e9f-7f3423f5dec7</td><td>Notifications & Messaging</td><td>QA</td><td>Configuration Error</td><td>NotificationService, SMTP, PushGateway, SMS Provider</td><td>36</td><td>35.6</td><td>3.0</td></tr><tr class="low"><td>fddbdc8b-a107-4e9e-aa93-73de81644def</td><td>Promotions & Discounts</td><td>QA</td><td>Configuration Error</td><td>PromoService, Cache (Redis), DB (Rules), Client App</td><td>36</td><td>35.6</td><td>3.0</td></tr><tr class="low"><td>40d3863a-332f-423a-a15d-ff8418c525c0</td><td>Customer Support & Returns</td><td>Staging</td><td>Unknown</td><td>RMAService, Attachment S3, Email Service, DB (Tickets)</td><td>38</td><td>36.1</td><td>2.9</td></tr><tr class="low"><td>db3246c6-45bb-4e6b-83f4-7defdcbe017f</td><td>Inventory & Stock Control</td><td>QA</td><td>Unknown</td><td>InventoryService, DB (Postgres), Cache (Redis), Queue (Kafka)</td><td>36</td><td>32.4</td><td>2.7</td></tr>
+        </table>
+    </body>
+    </html>
+    
