@@ -17,16 +17,6 @@ jobs:
         run: |
           echo "Automation Report - $(date)" > report.txt
           echo "✅ All tests passed!" >> report.txt
-
-      - name: Send to Slack
-        uses: slackapi/slack-github-action@v1.24.0
-        with:
-          channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
-          slack-message: |
-            📊 *Hackathon Report* uploaded. See attached files
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-
       - name: Upload HTML Reports as Artifacts
         uses: actions/upload-artifact@v4
         if: always()
@@ -36,12 +26,16 @@ jobs:
           name: Automation-Tests-html-reports
           path: ./test_results/
           
-      - name: Send Test Results to Slack
+      - name: Send to Slack
+        uses: slackapi/slack-github-action@v1.24.0
         with:
-          slack_token: ${{ secrets.SLACK_TOKEN }}
-          channel_id: ${{ secrets.SLACK_CHANNEL_ID }}
-          slack-message: |    
-               artifact_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-       
+          channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
+          slack-message: |
+            📊 *Hackathon Report* uploaded. See attached files
+            artifact_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+
+      
           
      
