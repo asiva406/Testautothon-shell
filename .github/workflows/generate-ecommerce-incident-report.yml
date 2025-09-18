@@ -24,11 +24,11 @@ jobs:
 
       - name: Run Main Python Code
         run: |
-          python .\test_plan.py
+          python test_plan.py
 
       - name: Generate HTML Report
         run: |
-          python .\generate_html_report.py
+          python generate_html_report.py
 
       - name: Upload HTML Report
         uses: actions/upload-artifact@v4
