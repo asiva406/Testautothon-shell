@@ -35,6 +35,16 @@ jobs:
             Report_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+     
+      - name: Upload test results to Slack
+        run: |
+           curl -X POST -H 'Content-type: application/json' \
+           --data "$(jq -Rs --argfile f test_results\report.html '{text: $f}')" \
+           ${{ secrets.SLACK_WEBHOOK_URL }}
+        shell: bash
+     
+
+          
 
       
           
