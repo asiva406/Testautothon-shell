@@ -5,12 +5,14 @@ from collections import Counter
 
 def generate_html_report(plan_json_path, html_path):
     # Ensure the output directory exists
+    html_result_dir = os.path.join("test_results", "html_result")
+    html_path = os.path.join(html_result_dir, "report.html")
     output_dir = os.path.dirname(html_path)
     if output_dir and not os.path.exists(output_dir):
         os.makedirs(output_dir, exist_ok=True)
-    # Copy style.css to output directory
+    # Copy style.css to html_result directory
     src_css = os.path.join('report_generation_utils', 'style.css')
-    dst_css = os.path.join(output_dir, 'style.css')
+    dst_css = os.path.join(html_result_dir, 'style.css')
     if os.path.exists(src_css):
         import shutil
         shutil.copyfile(src_css, dst_css)
@@ -261,6 +263,7 @@ def generate_html_report(plan_json_path, html_path):
 
 
 if __name__ == "__main__":
-    plan_json_path = os.path.join("sample_data", "plan.json")
+    plan_json_path = os.path.join("test_results", "final_incidents_list.json")
     html_path = os.path.join("test_results", "report.html")
+
     generate_html_report(plan_json_path, html_path)

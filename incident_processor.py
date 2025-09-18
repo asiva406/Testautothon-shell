@@ -1,6 +1,19 @@
+
 import json
 import yaml
 import os
+import logging
+
+# Set up logging
+LOG_DIR = os.path.join(os.path.dirname(__file__), 'test_results')
+os.makedirs(LOG_DIR, exist_ok=True)
+LOG_FILE = os.path.join(LOG_DIR, 'incident_processor.log')
+logging.basicConfig(
+    filename=LOG_FILE,
+    filemode='w',
+    level=logging.INFO,
+    format='%(asctime)s %(levelname)s: %(message)s'
+)
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), 'sample_data')
 # Load Policy.yaml
@@ -24,6 +37,7 @@ with open(os.path.join(DATA_DIR, 'Failures.jsonl'), 'r') as f:
                 'impacted_layers': rec.get('impacted_layers', [])
             })
         except json.JSONDecodeError as e:
+            logging.warning(f"Skipping malformed JSON on line {idx}: {e}")
             print(f"Warning: Skipping malformed JSON on line {idx}: {e}")
 
 # Helper functions
@@ -87,8 +101,10 @@ def sort_key(x):
 
 results.sort(key=sort_key)
 
-# Write to plan.json in sample_data
-with open(os.path.join(DATA_DIR, 'plan.json'), 'w') as f:
+# Write to final_incidents_list.json in test_results
+PLAN_FILE = os.path.join(LOG_DIR, 'final_incidents_list.json')
+with open(PLAN_FILE, 'w') as f:
     json.dump(results, f, indent=2)
 
-print(f"Plan written to {os.path.join(DATA_DIR, 'plan.json')} with {len(results)} incidents.")
+logging.info(f"Plan written to {PLAN_FILE} with {len(results)} incidents.")
+print(f"Plan written to {PLAN_FILE} with {len(results)} incidents.")
