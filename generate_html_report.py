@@ -26,14 +26,18 @@ def generate_html_report(plan_json_path, html_path):
     failure_type_counts = Counter([r.get('failure_type', '') for r in results])
     environment_counts = Counter([r.get('environment', '') for r in results])
 
-    # Sort for top 5
-    top_modules = module_counts.most_common(5)
+
+    # Use all modules for the bar graph
+    all_modules = list(module_counts.keys())
+    all_module_counts = [module_counts[m] for m in all_modules]
+
+    # Keep top 5 for pie charts
     top_failure_types = failure_type_counts.most_common(5)
     top_environments = environment_counts.most_common(5)
 
     # Prepare data for charts
-    module_labels = [m for m, _ in top_modules]
-    module_counts_data = [c for _, c in top_modules]
+    module_labels = all_modules
+    module_counts_data = all_module_counts
     failure_type_labels = [ft for ft, _ in top_failure_types]
     failure_type_counts_data = [c for _, c in top_failure_types]
     environment_labels = [env for env, _ in top_environments]
@@ -111,7 +115,7 @@ def generate_html_report(plan_json_path, html_path):
             <div class="dashboard-flex">
                 <div class="dashboard-section">
                     <div style="margin-bottom: 10px; font-size: 1.2em; font-weight: bold;">Modules</div>
-                    <canvas id="modulesChart" width="260" height="220"></canvas>
+                    <canvas id="modulesChart" width="260" height="320"></canvas>
                 </div>
                 <div class="dashboard-section">
                     <div style="margin-bottom: 10px; font-size: 1.2em; font-weight: bold;">Failure Types</div>
@@ -173,7 +177,16 @@ def generate_html_report(plan_json_path, html_path):
                             }}
                         }},
                         scales: {{
-                            y: {{ beginAtZero: true, precision: 0 }}
+                            y: {{ beginAtZero: true, precision: 0 }},
+                            x: {{
+                                ticks: {{
+                                    maxRotation: 60,
+                                    minRotation: 45,
+                                    autoSkip: false,
+                                    font: {{ size: 12 }}
+                                }},
+                                padding: 30
+                            }}
                         }}
                     }},
                     plugins: [ChartDataLabels]
