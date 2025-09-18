@@ -29,12 +29,12 @@ jobs:
 
       - name: Run Unit Tests
         run: |
-          python test_plan_test.py
+          python test_incident_processor.py
         continue-on-error: true
           
       - name: Run Main Python Code
         run: |
-          python test_plan.py
+          python incident_processor.py
         continue-on-error: true
 
       - name: Generate HTML Report
