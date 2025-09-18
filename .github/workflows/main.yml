@@ -36,17 +36,12 @@ jobs:
           name: Automation-Tests-html-reports
           path: ./test_results/
           
-      - name: Send Test Results to Teams
-        shell: bash
-        env:
+      - name: Send Test Results to Slack
+        with:
           slack_token: ${{ secrets.SLACK_TOKEN }}
           channel_id: ${{ secrets.SLACK_CHANNEL_ID }}
-        run: |
-          echo "## Sending test results to Slck"
-          artifact_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-          workflow_name="${{ github.workflow }}"
-          environment="QA"
-          trigger_type="${{ github.event_name }}"
-          triggered_by="${{ github.actor }}"
+          slack-message: |    
+               artifact_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+       
           
      
