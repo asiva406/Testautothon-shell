@@ -33,5 +33,5 @@ jobs:
           slack_token: ${{ secrets.SLACK_TOKEN }}
           file_path: './test_results/report.html'
           channel_id: ${{ secrets.SLACK_CHANNEL_ID }}
-          initial_comment: 'Here is the test report!'
+ 
      
