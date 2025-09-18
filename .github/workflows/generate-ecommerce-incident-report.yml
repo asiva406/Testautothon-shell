@@ -35,9 +35,6 @@ jobs:
         with:
           name: ecommerce-incident-report
           path: test_results/report.html
-
-      - name: Upload CSS Asset
-        uses: actions/upload-artifact@v4
           
       - name: Upload HTML Reports as Artifacts
         uses: actions/upload-artifact@v4
