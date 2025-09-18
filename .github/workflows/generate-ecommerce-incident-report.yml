@@ -9,6 +9,7 @@ on:
 jobs:
   generate-report:
     runs-on: ubuntu-latest
+    env: QA
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
