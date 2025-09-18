@@ -28,10 +28,10 @@ jobs:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
 
       - name: Upload test_results to Slack
-        run: |
-          for file in test_results/*; do
-            curl -F file=@$file \
-                 -F channels=${{ secrets.SLACK_CHANNEL_ID }} \
-                 -H "Authorization: Bearer ${{ secrets.SLACK_BOT_TOKEN }}" \
-                 https://slack.com/api/files.upload
-          done
+        uses: aabed/slack-file-upload-action@v1.0.0
+        with:
+          slack_token: ${{ secrets.SLACK_TOKEN }}
+          file_path: './test_results/report.html'
+          channel_id: ${{ secrets.SLACK_CHANNEL_ID }}
+          initial_comment: 'Here is the test report!'
+     
