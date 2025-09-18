@@ -2,9 +2,9 @@ name: generate-ecommerce-incident-report
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
+  # push:
+  #   branches:
+  #     - main
 
 jobs:
   generate-report:
