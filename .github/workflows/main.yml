@@ -21,11 +21,10 @@ jobs:
       - name: Send to Slack
         uses: slackapi/slack-github-action@v1.24.0
         with:
-          method: chat.postMessag 
           token: ${{ secrets.SLACK_BOT_TOKEN }}
           payload: |
             {
-              "channel": C09FQG37BQT,
+              "channel": "C09FQG37BQT",
               "text": "📊 *Automation Report*:\n```$(cat report.txt)```"
             }
         env:
