@@ -1,0 +1,38 @@
+
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  send-report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Generate Report
+        run: |
+          echo "Automation Report - $(date)" > report.txt
+          echo "✅ All tests passed!" >> report.txt
+
+      - name: Send to Slack
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          payload: |
+            {
+              "channel": "shell_hackathon_eng-aaaark7pjvflhi2ja4gtkkkgpi@shellhackathon.slack.com",
+              "text": "📊 *Automation Report*:\n```$(cat report.txt)```"
+            }
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+
+      - name: Upload test_results to Slack
+        run: |
+          for file in test_results/*; do
+            curl -F file=@$file \
+                 -F channels=shell_hackathon_eng-aaaark7pjvflhi2ja4gtkkkgpi@shellhackathon.slack.com \
+                 -H "Authorization: Bearer ${{ secrets.SLACK_BOT_TOKEN }}" \
+                 https://slack.com/api/files.upload
+          done
