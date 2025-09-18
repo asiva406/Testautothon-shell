@@ -37,14 +37,6 @@ jobs:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
      
       
-      - name: Upload HTML test report to Slack
-        run: |
-            curl -F file=@report.html \
-            -F "initial_comment=Test Report from GitHub Actions" \
-            -F channels=${{ secrets.SLACK_CHANNEL_ID }} \
-            -H "Authorization: Bearer ${{ secrets.SLACK_BOT_TOKEN }}" \
-            https://slack.com/api/files.upload
-
      
 
           
