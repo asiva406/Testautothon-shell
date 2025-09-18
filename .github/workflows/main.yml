@@ -24,7 +24,7 @@ jobs:
           token: ${{ secrets.SLACK_BOT_TOKEN }}
           payload: |
             {
-              "channel-id": "C09FQG37BQT",
+              'channel-id': ${{ secrets.SLACK_CHANNEL_ID }}",
               "text": "📊 *Automation Report*:\n```$(cat report.txt)```"
             }
         env:
