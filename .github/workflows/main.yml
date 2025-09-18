@@ -32,7 +32,7 @@ jobs:
           channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
           slack-message: |
             📊 *E-Commerce Incidents Report*. Refer attached Url.
-            artifact_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            Report_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
 
