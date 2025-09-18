@@ -15,8 +15,8 @@ jobs:
 
       - name: Generate Report
         run: |
-          echo "Automation Report - $(date)" > report.txt
-          echo "✅ All tests passed!" >> report.txt
+          echo "E-Commerce Incidents Report - $(date)" > report.txt
+          
       - name: Upload HTML Reports as Artifacts
         uses: actions/upload-artifact@v4
         if: always()
@@ -31,7 +31,7 @@ jobs:
         with:
           channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
           slack-message: |
-            📊 *Hackathon Report* uploaded. See attached files
+            📊 *E-Commerce Incidents Report*. Refer attached Url.
             artifact_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
