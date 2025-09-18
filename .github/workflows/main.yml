@@ -23,7 +23,7 @@ jobs:
         with:
           payload: |
             {
-              "channel": "shell_hackathon_eng-aaaark7pjvflhi2ja4gtkkkgpi@shellhackathon.slack.com",
+              "channel": "C09FQG37BQT",
               "text": "📊 *Automation Report*:\n```$(cat report.txt)```"
             }
         env:
