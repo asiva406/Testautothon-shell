@@ -23,15 +23,30 @@ jobs:
         with:
           channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
           slack-message: |
-            📊 *Automation Report* uploaded. See attached files
+            📊 *Hackathon Report* uploaded. See attached files
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
 
-      - name: Upload test_results to Slack
-        uses: aabed/slack-file-upload-action@v1.0.0
+      - name: Upload HTML Reports as Artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
         with:
           slack_token: ${{ secrets.SLACK_TOKEN }}
-          file_path: './test_results/report.html'
           channel_id: ${{ secrets.SLACK_CHANNEL_ID }}
- 
+          name: Automation-Tests-html-reports
+          path: ./test_results/
+          
+      - name: Send Test Results to Teams
+        shell: bash
+        env:
+          slack_token: ${{ secrets.SLACK_TOKEN }}
+          channel_id: ${{ secrets.SLACK_CHANNEL_ID }}
+        run: |
+          echo "## Sending test results to Slck"
+          artifact_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          workflow_name="${{ github.workflow }}"
+          environment="QA"
+          trigger_type="${{ github.event_name }}"
+          triggered_by="${{ github.actor }}"
+          
      
