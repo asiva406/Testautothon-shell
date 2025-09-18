@@ -30,12 +30,6 @@ jobs:
       - name: Generate HTML Report
         run: |
           python generate_html_report.py
-
-      - name: Upload HTML Report
-        uses: actions/upload-artifact@v4
-        with:
-          name: ecommerce-incident-report
-          path: test_results/report.html
           
       - name: Upload HTML Reports as Artifacts
         uses: actions/upload-artifact@v4
