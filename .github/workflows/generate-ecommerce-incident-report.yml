@@ -29,7 +29,7 @@ jobs:
 
       - name: Run Unit Tests
         run: |
-          python test_incident_processor.py
+          python tests/test_incident_processor.py
         continue-on-error: true
           
       - name: Run Main Python Code
