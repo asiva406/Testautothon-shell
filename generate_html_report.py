@@ -31,17 +31,20 @@ def generate_html_report(plan_json_path, html_path):
     all_modules = list(module_counts.keys())
     all_module_counts = [module_counts[m] for m in all_modules]
 
-    # Keep top 5 for pie charts
-    top_failure_types = failure_type_counts.most_common(5)
-    top_environments = environment_counts.most_common(5)
+
+    # Use all failure types and environments for pie charts
+    all_failure_types = list(failure_type_counts.keys())
+    all_failure_type_counts = [failure_type_counts[ft] for ft in all_failure_types]
+    all_environments = list(environment_counts.keys())
+    all_environment_counts = [environment_counts[env] for env in all_environments]
 
     # Prepare data for charts
     module_labels = all_modules
     module_counts_data = all_module_counts
-    failure_type_labels = [ft for ft, _ in top_failure_types]
-    failure_type_counts_data = [c for _, c in top_failure_types]
-    environment_labels = [env for env, _ in top_environments]
-    environment_counts_data = [c for _, c in top_environments]
+    failure_type_labels = all_failure_types
+    failure_type_counts_data = all_failure_type_counts
+    environment_labels = all_environments
+    environment_counts_data = all_environment_counts
 
     # Prepare chart data as JSON for JS
     module_labels_js = json.dumps(module_labels)
@@ -115,15 +118,15 @@ def generate_html_report(plan_json_path, html_path):
             <div class="dashboard-flex">
                 <div class="dashboard-section">
                     <div style="margin-bottom: 10px; font-size: 1.2em; font-weight: bold;">Modules</div>
-                    <canvas id="modulesChart" width="260" height="320"></canvas>
+                    <canvas id="modulesChart" width="400" height="320"></canvas>
                 </div>
                 <div class="dashboard-section">
                     <div style="margin-bottom: 10px; font-size: 1.2em; font-weight: bold;">Failure Types</div>
-                    <canvas id="failureTypesChart" width="220" height="220"></canvas>
+                    <canvas id="failureTypesChart" width="350" height="300"></canvas>
                 </div>
                 <div class="dashboard-section">
                     <div style="margin-bottom: 10px; font-size: 1.2em; font-weight: bold;">Environments</div>
-                    <canvas id="environmentsChart" width="220" height="220"></canvas>
+                    <canvas id="environmentsChart" width="250" height="250"></canvas>
                 </div>
             </div>
         </div>
