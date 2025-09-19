@@ -45,7 +45,7 @@ This creates a dashboard in the `test_results/html_result` folder (`report.html`
 ## GitHub Actions
 Workflow `generate-ecommerce-incident-report` automates report generation and artifact upload on push or manual trigger.
 
-## Example Commands
+## Folder Structure
 ```
 ├── incident_processor.py        # Processes incidents and generates final_incidents_list.json
 ├── generate_html_report.py      # Generates the HTML dashboard/report
