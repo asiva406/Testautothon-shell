@@ -101,6 +101,91 @@ def sort_key(x):
 
 results.sort(key=sort_key)
 
+# Add assertions to validate generated data
+def validate_results(results, policy):
+    """Validate the processed incident data for correctness."""
+    logging.info("Starting data validation...")
+    
+    assert results, "Results list should not be empty"
+    assert isinstance(results, list), "Results should be a list"
+    
+    upper_cap = policy.get('caps', {}).get('per_incident_minutes_max')
+    layer_minutes = policy.get('minutes_per_impacted_layer', {})
+    env_mults = policy.get('multipliers', {}).get('by_environment', {})
+    fail_mults = policy.get('multipliers', {}).get('by_failure_type', {})
+    module_priorities = policy.get('module_priority_score', {})
+    
+    for idx, incident in enumerate(results):
+        # Test basic structure
+        assert isinstance(incident, dict), f"Incident {idx} should be a dictionary"
+        required_fields = ['test_id', 'module', 'environment', 'failure_type', 
+                          'impacted_layers', 'base_minutes', 'final_minutes', 'priority_score']
+        
+        for field in required_fields:
+            assert field in incident, f"Incident {idx} missing required field: {field}"
+        
+        # Validate data types
+        assert isinstance(incident['impacted_layers'], list), f"Incident {idx}: impacted_layers should be a list"
+        assert isinstance(incident['base_minutes'], (int, float)), f"Incident {idx}: base_minutes should be numeric"
+        assert isinstance(incident['final_minutes'], (int, float)), f"Incident {idx}: final_minutes should be numeric"
+        assert isinstance(incident['priority_score'], (int, float)), f"Incident {idx}: priority_score should be numeric"
+        
+        # Validate non-negative values
+        assert incident['base_minutes'] >= 0, f"Incident {idx}: base_minutes should be non-negative"
+        assert incident['final_minutes'] >= 0, f"Incident {idx}: final_minutes should be non-negative"
+        assert incident['priority_score'] >= 0, f"Incident {idx}: priority_score should be non-negative"
+        
+        # Validate upper cap is respected
+        if upper_cap is not None:
+            assert incident['final_minutes'] <= upper_cap, f"Incident {idx}: final_minutes {incident['final_minutes']} exceeds cap {upper_cap}"
+        
+        # Validate base_minutes calculation
+        expected_base = sum(layer_minutes.get(layer, 0) for layer in incident['impacted_layers'])
+        assert incident['base_minutes'] == expected_base, f"Incident {idx}: base_minutes calculation incorrect. Expected {expected_base}, got {incident['base_minutes']}"
+        
+        # Validate final_minutes calculation (considering multipliers and cap)
+        env_mult = env_mults.get(incident['environment'], 1.0)
+        fail_mult = fail_mults.get(incident['failure_type'], 1.0)
+        expected_final = incident['base_minutes'] * env_mult * fail_mult
+        if upper_cap is not None and expected_final > upper_cap:
+            expected_final = upper_cap
+        
+        assert abs(incident['final_minutes'] - expected_final) < 0.001, f"Incident {idx}: final_minutes calculation incorrect. Expected {expected_final}, got {incident['final_minutes']}"
+        
+        # Validate priority_score calculation
+        module_priority = module_priorities.get(incident['module'], 1)
+        expected_priority = round(module_priority * env_mult * fail_mult, 3)
+        assert abs(incident['priority_score'] - expected_priority) < 0.001, f"Incident {idx}: priority_score calculation incorrect. Expected {expected_priority}, got {incident['priority_score']}"
+    
+    # Validate sorting order (priority_score desc, then module asc)
+    for i in range(len(results) - 1):
+        current = results[i]
+        next_item = results[i + 1]
+        
+        if current['priority_score'] == next_item['priority_score']:
+            # If priority scores are equal, module should be in ascending order
+            current_module = current['module'] if current['module'] is not None else ''
+            next_module = next_item['module'] if next_item['module'] is not None else ''
+            assert current_module <= next_module, f"Sorting error at index {i}: modules not in ascending order when priority scores are equal"
+        else:
+            # Priority scores should be in descending order
+            assert current['priority_score'] >= next_item['priority_score'], f"Sorting error at index {i}: priority scores not in descending order"
+    
+    logging.info(f"Data validation completed successfully for {len(results)} incidents.")
+    print(f"✓ Data validation passed for {len(results)} incidents.")
+
+# Run validation
+try:
+    validate_results(results, policy)
+except AssertionError as e:
+    logging.error(f"Data validation failed: {e}")
+    print(f"❌ Data validation failed: {e}")
+    raise
+except Exception as e:
+    logging.error(f"Unexpected error during validation: {e}")
+    print(f"❌ Unexpected error during validation: {e}")
+    raise
+
 # Write to final_incidents_list.json in test_results
 PLAN_FILE = os.path.join(LOG_DIR, 'final_incidents_list.json')
 with open(PLAN_FILE, 'w') as f:
