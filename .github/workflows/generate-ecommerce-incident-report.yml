@@ -62,3 +62,11 @@ jobs:
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
         continue-on-error: true
+
+      - name: Notify Execution Status to Teams
+        shell: bash
+        env:
+          TEAMS_ALERT: ${{ secrets.TEAMS_WEBHOOK_URL }}
+        run: |
+          message="✅ **E-Commerce Incident Report is Ready**\n\n🔗 **View Results**: [Click here](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})"
+          curl -H 'Content-Type: application/json' -d "{\"text\": \"$message\"}" "$TEAMS_ALERT"
