@@ -1,4 +1,3 @@
-
 import json
 import yaml
 import os
@@ -22,7 +21,7 @@ with open(os.path.join(DATA_DIR, 'Policy.yaml'), 'r') as f:
 
 # Load Failures.jsonl and filter required fields
 failures = []
-with open(os.path.join(DATA_DIR, 'Failures.jsonl'), 'r') as f:
+with open(os.path.join(DATA_DIR, 'Test_Day2_Team2.jsonl'), 'r') as f:
     for idx, line in enumerate(f, 1):
         line = line.strip()
         if not line:
